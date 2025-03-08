@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Widget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+        .chat-header {
+            background: #2575fc;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .chat-body {
+            height: 350px;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 8px;
+            margin: 5px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .user-message {
+            background: #2575fc;
+            color: white;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background: #e5e5e5;
+            color: black;
+            align-self: flex-start;
+        }
+        .chat-footer {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+        input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #2575fc;
+            color: white;
+            border: none;
+            padding: 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #1b5cd6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-widget">
+    <div class="chat-header">💬 Loan Assistant</div>
+    <div class="chat-body" id="chatBody">
+        <div class="chat-message bot-message">Hello! How can I assist you with your loan queries today?</div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="userInput" placeholder="Ask about loans..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    function sendMessage() {
+        const inputField = document.getElementById("userInput");
+        const userText = inputField.value.trim();
+        if (!userText) return;
+
+        appendMessage("user", userText);
+        inputField.value = "";
+
+        setTimeout(() => {
+            appendMessage("bot", getBotResponse(userText));
+        }, 1000);
+    }
+
+    function appendMessage(sender, text) {
+        const chatBody = document.getElementById("chatBody");
+        const messageDiv = document.createElement("div");
+        messageDiv.classList.add("chat-message", sender === "user" ? "user-message" : "bot-message");
+        messageDiv.innerText = text;
+        chatBody.appendChild(messageDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+        input = input.toLowerCase();
+
+        if (input.includes("loan")) return "Loans can be secured or unsecured. What type are you interested in?";
+        if (input.includes("interest rate")) return "Interest rates vary based on your credit score and lender policies.";
+        if (input.includes("repayment")) return "Loan repayments depend on EMI calculations. Do you want a breakdown?";
+        if (input.includes("apply")) return "You can apply for a loan online or through a bank. Would you like a recommendation?";
+        
+        return "I'm here to help! Can you be more specific about your loan query?";
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    }
+</script>
+
+</body>
+</html>
